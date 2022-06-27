@@ -1,60 +1,80 @@
-let playerSelection = prompt('Choose rock, paper, or scissors')
-while (playerSelection.toLowerCase() !== 'rock' && playerSelection.toLowerCase() !== 'paper' && playerSelection.toLowerCase() !== 'scissors') {
-    alert('Wrong input')
-    playerSelection = prompt('Choose rock, paper, or scissors')
-}
-
-
-// Create a function that will return randomly generated R,P,S
 function computerPlay() {
-    let randomNumber = Math.ceil(Math.random() * 3)
+    let randomNumber = Math.floor(Math.random() * 3) + 1;
+    console.log(randomNumber)
     if (randomNumber === 1) {
-        return 'Rock'
+        return 'rock'
     } else if (randomNumber === 2) {
-        return 'Paper'
+        return 'paper'
     } else {
-        return 'Scissors'
+        return 'scissors'
     }
 }
 
-// Write a function that plays a single round of Rock Paper Scissors. The function should take two parameters - the playerSelection and computerSelection - and then return a string that declares the winner of the round like so: "You Lose! Paper beats Rock"
+const rock = document.createElement('button')
+rock.innerText = 'Rock'
+rock.classList = 'rock'
+document.body.appendChild(rock)
 
-function playRound(playerSelection, computerSelection) {
-    if (playerSelection.toLowerCase() === 'rock' && computerSelection === 'Scissors') {
-        return 'You win! Rock beats Scissors'
-    } else if (playerSelection.toLowerCase() === 'rock' && computerSelection === 'Paper') {
-        return 'You lose! Paper beats Rock'
-    } else if (playerSelection.toLowerCase() === 'paper' && computerSelection === 'Rock') {
-        return 'You win! Paper beats Rock'
-    } else if (playerSelection.toLowerCase() === 'paper' && computerSelection === 'Scissors') {
-        return 'You lose! Scissors beats paper'
-    } else if (playerSelection.toLowerCase() === 'scissors' && computerSelection === 'Paper') {
-        return 'You win! Scissors beats Paper'
-    } else if (playerSelection.toLowerCase() === 'scissors' && computerSelection === 'Rock') {
-        return 'You lose! Rock beats Scissors'
+const paper = document.createElement('button')
+paper.innerText = 'Paper'
+paper.classList = 'paper'
+document.body.appendChild(paper)
+
+const scissors = document.createElement('button')
+scissors.innerText = 'Scissors'
+scissors.classList = 'scissors'
+document.body.appendChild(scissors)
+
+const buttons = document.querySelectorAll('button')
+
+buttons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+        let userChoice = e.target.textContent.toLowerCase()
+        console.log(userChoice)
+        playRound(userChoice)
+    })
+})
+
+let playerScore = 0
+let computerScore = 0
+let totalTies = 0
+
+function playRound(userChoice, computerSelection) {
+    computerSelection = computerPlay()
+    playerSelection = userChoice
+    if (playerSelection === 'rock' && computerSelection === 'scissors') {
+        playerScore++
+    } else if (playerSelection.toLowerCase() === 'rock' && computerSelection === 'paper') {
+        computerScore++
+    } else if (playerSelection.toLowerCase() === 'paper' && computerSelection === 'rock') {
+        playerScore++
+    } else if (playerSelection.toLowerCase() === 'paper' && computerSelection === 'scissors') {
+        computerScore++
+    } else if (playerSelection.toLowerCase() === 'scissors' && computerSelection === 'paper') {
+        playerScore++
+    } else if (playerSelection.toLowerCase() === 'scissors' && computerSelection === 'rock') {
+        computerScore++
+        console.log(computerScore)
     } else {
-        return 'Tie! Try again!'
+        totalTies++
     }
 }
 
-function game() {
-    let playerScore = 0
-    let computerScore = 0
-    let tie = 0
-    for (let i = 1; i <= 5; i++) {
-        const computerSelection = computerPlay()
-        console.log(playRound(playerSelection, computerSelection))
-        if (playRound(playerSelection, computerSelection).includes('win')) {
-            playerScore += 1
-        } else if (playRound(playerSelection, computerSelection).includes('lose')) {
-            computerScore += 1
-        } else {
-            tie += 1
-        }
-    }
-    console.log(`Your score: ${playerScore}`)
-    console.log(`Computer Score: ${computerScore}`)
-    console.log(`Total ties: ${tie}`)
-}
+const results = document.createElement('div')
+document.body.appendChild(results)
 
-game()
+const player = document.createElement('span')
+player.classList.add('player-score')
+player.textContent += `${playerScore} total player wins`
+
+const computer = document.createElement('span')
+computer.classList.add('computer-score')
+computer.innerText += `${computerScore} total computer wins`
+
+const ties = document.createElement('span')
+ties.classList.add('ties')
+ties.textContent += `${totalTies} total ties`
+
+results.appendChild(player)
+results.appendChild(computer)
+results.appendChild(ties)
